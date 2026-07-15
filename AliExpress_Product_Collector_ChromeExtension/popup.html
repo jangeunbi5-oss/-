@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AliExpress Collector</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="app">
+      <nav class="tabs" aria-label="화면 전환">
+        <button class="tab active" data-view="crawl">수집</button>
+        <button class="tab" data-view="results">저장 목록</button>
+      </nav>
+
+      <section id="crawlView" class="view active">
+        <header class="header">
+          <div>
+            <p class="eyebrow">Crawler Control</p>
+            <h1>상품 수집</h1>
+          </div>
+          <span id="runStatus" class="status">대기</span>
+        </header>
+
+        <section class="panel">
+          <h2>키워드 검색</h2>
+          <div class="fieldGrid">
+            <input id="keywordInput" type="text" placeholder="예: 라면, phone case">
+            <input id="maxItemsInput" type="number" min="0" value="0" title="0은 제한 없음" aria-label="최대 수집 개수">
+          </div>
+          <button id="startKeywordButton" class="primary">검색창 열고 수집</button>
+          <div class="buttonRow">
+            <button id="pauseButton" class="secondary">일시정지</button>
+            <button id="resumeButton" class="secondary">재개</button>
+            <button id="stopButton" class="danger">종료</button>
+          </div>
+          <p class="hint">AliExpress 검색 결과에서 상품 링크를 모은 뒤 상세 페이지 HTML을 직접 분석합니다.</p>
+        </section>
+
+        <section class="panel">
+          <button id="toggleUrlPanel" class="linkButton" type="button">URL 직접 수집 열기</button>
+          <div id="urlPanel" class="hidden">
+            <textarea id="urlsInput" placeholder="https://ko.aliexpress.com/item/1005008846977482.html"></textarea>
+            <button id="startUrlsButton" class="primary">URL 목록 수집</button>
+          </div>
+        </section>
+
+        <section id="errorBox" class="error hidden"></section>
+
+        <section class="panel">
+          <div class="sectionHeader">
+            <h2>이번 수집 결과</h2>
+            <span id="crawlCount" class="hint">0개</span>
+          </div>
+          <div class="buttonRow">
+            <button id="selectCrawlAllButton" class="secondary">전체 선택</button>
+            <button id="clearCrawlSelectionButton" class="secondary">선택 해제</button>
+            <button id="saveSelectedButton" class="primary">선택 저장</button>
+          </div>
+          <div class="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>선택</th>
+                  <th>상태</th>
+                  <th>상품명</th>
+                  <th>가격</th>
+                </tr>
+              </thead>
+              <tbody id="crawlRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="sectionHeader">
+            <h2>로그</h2>
+            <button id="clearLogsButton" class="secondary small">비우기</button>
+          </div>
+          <div id="logBox" class="logBox"></div>
+        </section>
+      </section>
+
+      <section id="resultsView" class="view">
+        <header class="header">
+          <div>
+            <p class="eyebrow">Collected Items</p>
+            <h1>저장 목록</h1>
+          </div>
+          <button id="refreshResultsButton" class="secondary small">새로고침</button>
+        </header>
+
+        <section id="noticeBox" class="notice hidden"></section>
+
+        <section class="summary">
+          <div>
+            <span>전체 상품</span>
+            <strong id="totalItems">0</strong>
+          </div>
+          <div>
+            <span>선택 상품</span>
+            <strong id="selectedItems">0</strong>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="fileNameRow">
+            <input id="filenameInput" type="text" placeholder="저장 파일 이름">
+          </div>
+          <div class="formatRow">
+            <label><input type="checkbox" value="csv" checked> CSV</label>
+            <label><input type="checkbox" value="xls" checked> Excel 호환(.xls)</label>
+            <label><input type="checkbox" value="json"> JSON</label>
+          </div>
+          <div class="buttonRow">
+            <button id="exportSelectedButton" class="primary">선택 파일 저장</button>
+            <button id="deleteSelectedButton" class="danger">선택 삭제</button>
+            <button id="selectAllResultsButton" class="secondary">전체 선택</button>
+            <button id="clearResultsSelectionButton" class="secondary">선택 해제</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="sectionHeader">
+            <h2>상품</h2>
+            <span id="resultCount" class="hint">0개</span>
+          </div>
+          <div class="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>선택</th>
+                  <th>상태</th>
+                  <th>상품명</th>
+                  <th>가격</th>
+                </tr>
+              </thead>
+              <tbody id="resultRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>내보내기 기록</h2>
+          <div id="exportHistory" class="history"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="parser.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
